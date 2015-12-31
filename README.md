@@ -1,6 +1,6 @@
 # peewee2ods.py
 
-The plan is to make this a script that takes in a [peewee](peeewe-orm.com)
+The plan is to make this a script that takes in a [peewee](http://docs.peeewe-orm.com)
 model definition file and output an ods file containing details about the
 data tables.
 
