@@ -18,14 +18,14 @@ def process_file(filepath):
         m2 = regex_model.match(l)
         m3 = regex_field.match(l)
         if m1:
-            print '--> ', l
+            pass # print '--> ', l
         elif m2:
-            print 'M-> ', l
+            # print 'M-> ', l
             d = m2.groupdict()
             current_model = d['model_name']
             models[current_model] = [] # List of fields
         elif m3:
-            print 'F-> ', l
+            # print 'F-> ', l
             d = m3.groupdict()
             models[current_model].append({
                 'name': d['field_name'],
