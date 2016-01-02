@@ -44,7 +44,17 @@ def print_data(models):
         print 'Model: %s' % model
         for f in fieldlist:
             print '  * %s (%s)' % (f['name'], f['type']),
-            if f.has_key('options_string'): print f['options_string'].split(',')
+            if f.has_key('options_string'):
+                print options_to_dict(f['options_string'])
+
+def options_to_dict(options_string):
+    '''Parse a string of options and output a formatted dictionary'''
+    optlist = options_string.split(',')
+    optdict = {}
+    for o in optlist:
+        o = o.strip().split('=')
+        if len(o) == 2: optdict[o[0]] = o[1]
+    return optdict
 
 if __name__ == '__main__':
     path = os.path.abspath(sys.argv[1])
