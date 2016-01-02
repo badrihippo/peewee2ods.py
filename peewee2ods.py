@@ -10,8 +10,9 @@ regex_blank = re.compile(r'^$')
 regex_model = re.compile(r'^class (?P<model_name>.*)\(.*\):$')
 regex_field = re.compile(r'^(?P<field_name>.*) = (?P<field_type>.*)\((?P<options>.*)\)')
 
-analysis = []
 current_model = None
+
+models = {}
 
 f = open(path, 'r')
 for line in f.readlines():
@@ -25,15 +26,20 @@ for line in f.readlines():
         print 'M-> ', l
         d = m2.groupdict()
         current_model = d['model_name']
-        analysis.append('Model => %s' % current_model)
+        models[current_model] = [] # List of fields
     elif m3:
         print 'F-> ', l
-        analysis.append('Field => %(model)s => %(field)s' % {
-            'model': current_model,
-            'field': m3.groupdict()['field_name']})
+        d = m3.groupdict()
+        models[current_model].append({
+            'name': d['field_name'],
+            'type': d['field_type'],
+            'options_string': d['options']})
     else:
         print '?-> ', l
 f.close()
 
-print '=== Analysis ==='
-for l in analysis: print l
+print '=== Dict dump ==='
+for model, fieldlist in models.items():
+    print 'Model: %s' % model
+    for f in fieldlist:
+        print '  * %s (%s)' % (f['name'], f['type'])
