@@ -56,6 +56,21 @@ def options_to_dict(options_string):
         if len(o) == 2: optdict[o[0]] = o[1]
     return optdict
 
+def get_option_table_index(models):
+    '''
+    Creates a unique list of options from all the models, so that they
+    can be used to position options in the spreadsheet.
+    '''
+    all_option_names = []
+    for model, fieldlist in models.items():
+        for field in fieldlist:
+            if not field.has_key('options_dict'):
+                field['options_dict'] = options_to_dict(field['options_string'])
+            for option, value in field['options_dict'].items():
+                if all_option_names.count(option) == 0:
+                    all_option_names.append(option)
+    return all_option_names
+
 if __name__ == '__main__':
     path = os.path.abspath(sys.argv[1])
     models = process_file(path)
