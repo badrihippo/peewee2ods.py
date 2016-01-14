@@ -2,6 +2,7 @@
 import sys
 import os.path
 import re
+import odswriter as ods
 
 regex_blank = re.compile(r'^$')
 regex_model = re.compile(r'^class (?P<model_name>.*)\(.*\):$')
@@ -71,7 +72,28 @@ def get_option_table_index(models):
                     all_option_names.append(option)
     return all_option_names
 
+def write_data(models, outfile='peewee_models.ods', overwrite=False):
+    '''Write model data from process_file() to ODS output'''
+    outfile=os.path.abspath(outfile)
+    if (not overwrite) and os.path.exists(outfile):
+        raise ValueError, 'File already exists!'
+    optindex = get_option_table_index(models)
+    with ods.writer(open(outfile, 'wb')) as odsfile:
+        for model, fieldlist in models.items():
+            modelsheet = odsfile.new_sheet(model)
+            line = ['name', 'type'] + [o for o in optindex]
+            modelsheet.writerow(line)
+            for field in fieldlist:
+                line = [field['name'], field['type']] + ['' for i in range(len(optindex))]
+                if field.has_key('options_string'):
+                    if not field.has_key('options_dict'):
+                        field['options_dict'] = options_to_dict(field['options_string'])
+                    for option, value in field['options_dict'].items():
+                        line[optindex.index(option)+2] = value
+                modelsheet.writerow(line)
+
 if __name__ == '__main__':
     path = os.path.abspath(sys.argv[1])
     models = process_file(path)
     print_data(models)
+    write_data(models)
