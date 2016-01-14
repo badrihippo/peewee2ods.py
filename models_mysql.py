@@ -84,7 +84,7 @@ class Item(Model):
     #display_title = CharField(max_length=256)
 
     call_no = ListField(CharField(max_length=8))
-    publisher = ForeignKeyPublisher)
+    publisher = ForeignKey(Publisher)
     publish_place = ForeignKey(PublishPlace)
     publish_year = CharField(max_length=4)
     isbn = CharField(max_length=17) # TODO: Add validation
