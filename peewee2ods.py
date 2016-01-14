@@ -33,7 +33,7 @@ def process_file(filepath):
                 'type': d['field_type'],
                 'options_string': d['options']})
         else:
-            print '?-> ', l
+            print 'WARNING: Skipping line -> ', l
     f.close()
     return models
 
@@ -91,9 +91,11 @@ def write_data(models, outfile='peewee_models.ods', overwrite=False):
                     for option, value in field['options_dict'].items():
                         line[optindex.index(option)+2] = value
                 modelsheet.writerow(line)
+    print 'Models written to %s' % outfile
 
 if __name__ == '__main__':
     path = os.path.abspath(sys.argv[1])
     models = process_file(path)
-    print_data(models)
+    # For debugging only
+    # print_data(models)
     write_data(models)
