@@ -10,8 +10,8 @@ regex_field = re.compile(r'^(?P<field_name>.*) = (?P<field_type>.*)\((?P<options
 def process_file(filepath):
     current_model = None
     models = {}
-    if not os.path.isfile(path): raise ValueError('Invalid File!')
-    f = open(path, 'r')
+    if not os.path.isfile(filepath): raise ValueError('Invalid File!')
+    f = open(filepath, 'r')
     for line in f.readlines():
         l = line.strip()
         m1 = regex_blank.match(l)
